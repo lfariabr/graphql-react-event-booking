@@ -4,7 +4,8 @@
 - [x] What is GraphQL?
 - [x] API Design and project setup
 - [x] Schemas and Resolvers
-- [ ] Types and Data
+- [x] Types and Data
+- [ ] ?
 
 ...
 
@@ -19,3 +20,5 @@ https://www.youtube.com/watch?v=LXTyzk2uud0&list=PL55RiY5tL51rG1x02Yyj93iypUuHYX
 
 ## 4. Types & Data
 https://www.youtube.com/watch?v=6YlXANbXt0g&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=4
+
+## 5. 
