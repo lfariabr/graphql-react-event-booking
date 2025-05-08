@@ -5,7 +5,8 @@
 - [x] API Design and project setup
 - [x] Schemas and Resolvers
 - [x] Types and Data
-- [ ] Mongo DB
+- [x] Mongo DB
+- [ ] Adding relations
 
 ...
 
@@ -23,6 +24,9 @@ https://www.youtube.com/watch?v=6YlXANbXt0g&list=PL55RiY5tL51rG1x02Yyj93iypUuHYX
 
 ## 5. Mongo DB
 https://www.youtube.com/watch?v=sOUNgOx0GcU&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=5 (22m59s)
+
+## 6. Adding relations
+https://www.youtube.com/watch?v=MRrcUQhZwBc&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=6 (14m47s)
 
 mutation {
   createEvent (eventInput: {
