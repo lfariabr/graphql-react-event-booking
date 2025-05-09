@@ -1,9 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { graphqlHTTP } from 'express-graphql';
-import { buildSchema } from 'graphql';
 import mongoose from 'mongoose';
-
 import rootValue from './graphql/resolvers';
 import schema from './graphql/schema';
 
