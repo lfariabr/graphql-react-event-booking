@@ -7,7 +7,7 @@
 - [x] Types and Data
 - [x] Mongo DB
 - [x] Adding relations
-- [ ] Dynamic relations
+- [x] Dynamic relations
 
 ...
 
@@ -31,6 +31,8 @@ https://www.youtube.com/watch?v=MRrcUQhZwBc&list=PL55RiY5tL51rG1x02Yyj93iypUuHYX
 
 ## 7. Dynamic relations
 https://www.youtube.com/watch?v=bgq7FRSPDpI&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=7
+
+## 8. Adding Booking
 
 mutation {
   createEvent (eventInput: {
@@ -72,3 +74,7 @@ mutation {
 }
 
 brew services start redis
+
+
+# Redis
+redis-server /opt/homebrew/etc/redis.dev --daemonize yes

@@ -5,8 +5,14 @@ import bcrypt from 'bcryptjs';
 const rootValue = {
         events: async () => {
           try {
-          const events = await Event.find().populate('creator');
-          console.log("Found events:", events);
+          const events = await Event.find().populate({
+            path: 'creator',
+            populate: {
+              path: 'createdEvents',
+              model: 'Event'
+            }
+          });
+          // console.log("Found events:", events);
           return events.map((event: any) => {
             const eventObj = event.toObject();
             return {
