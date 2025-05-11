@@ -8,6 +8,8 @@
 - [x] Mongo DB
 - [x] Adding relations
 - [x] Dynamic relations
+- [x] Adding Booking
+- [ ] Refactoring our code
 
 ...
 
@@ -33,7 +35,48 @@ https://www.youtube.com/watch?v=MRrcUQhZwBc&list=PL55RiY5tL51rG1x02Yyj93iypUuHYX
 https://www.youtube.com/watch?v=bgq7FRSPDpI&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=7
 
 ## 8. Adding Booking
+https://www.youtube.com/watch?v=WcyYYD5xkuQ&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=8
 
+## 9. Refactoring our code
+https://www.youtube.com/watch?v=6y44oPKfqXU&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=9
+
+# Queries
+query {
+  events {
+    title
+    description
+    price
+    date
+    creator{
+      email
+    }
+  }
+}
+
+query {
+  bookings {
+    event {
+      _id
+      title
+      description
+      price
+      date
+      creator{
+        _id
+        email
+      }
+    },
+    _id,
+    createdAt
+    user {
+      _id
+      email
+    },
+    updatedAt
+  }
+}
+
+# Mutations
 mutation {
   createEvent (eventInput: {
     title: "Ok",
@@ -50,18 +93,6 @@ mutation {
   }
 }
 
-query {
-  events {
-    title
-    description
-    price
-    date
-    creator{
-      email
-    }
-  }
-}
-
 mutation {
   createUser (userInput:{
     email: "test@test.com",
@@ -73,8 +104,29 @@ mutation {
   }
 }
 
-brew services start redis
+mutation {
+  bookEvent (
+    eventId: "682027ac50d02decbf1f2d01"
+    userId: "681bf7bf5d3bfdb78fe11959"
+  ) {
+    _id
+    createdAt
+  }
+}
 
+mutation {
+  cancelBooking(bookingId: "682037d3c9fe8de50017a14a") {
+    _id
+    title
+    description
+    price
+    date
+    creator {
+      password
+    }
+  }
+}
 
 # Redis
 redis-server /opt/homebrew/etc/redis.dev --daemonize yes
+brew services start redis
