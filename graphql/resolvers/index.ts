@@ -5,6 +5,18 @@ import bcrypt from 'bcryptjs';
 const rootValue = {
         events: async () => {
           try {
+            // Optimize by using .lean() and maybe add const creatorIds = events.map(event => event.creator._id)
+            // const createdEvents = await User.find({ _id: { $in: creatorIds } })
+            // const enrichedEvents = events.map(event => {
+            //  const userCreatedEvents = createdEvents.filter(ce => ce.creator.equals(event.creator._id));
+            //  return {
+            //    ...event,
+            //    creator: {
+            //      ...event.creator,
+            //      createdEvents: userCreatedEvents
+            //    }
+            //  }
+            // });
           const events = await Event.find().populate({
             path: 'creator',
             populate: {
