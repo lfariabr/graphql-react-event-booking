@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import User from '../../models/User';
 import { transformUser } from './transformers';
+import jwt from 'jsonwebtoken';
 
 export const userResolvers = {
   users: async () => {
@@ -34,6 +35,27 @@ export const userResolvers = {
         throw new Error(error.message);
       }
       throw new Error("Creating user failed!");
+    }
+  },
+  login: async (args: any) => {
+    try {
+      const user = await User.findOne({ email: args.email });
+      if (!user) {
+        throw new Error("User not found!");
+      }
+      const isPasswordValid = await bcrypt.compare(args.password, user.password);
+      if (!isPasswordValid) {
+        throw new Error("Invalid password!");
+      }
+      const token = jwt.sign({ userId: user._id.toString() }, "secret", { expiresIn: "1h" });
+      return { 
+        userId: user._id.toString(), 
+        token: token, 
+        tokenExpiration: 3600 
+      };
+    } catch (error: any) {
+      console.error("Error logging in:", error?.message);
+      throw error;
     }
   }
 };

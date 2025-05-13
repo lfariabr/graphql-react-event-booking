@@ -38,6 +38,16 @@ query {
 }
 ```
 
+```graphql
+query {
+  login(email: "test@test.com", password: "test") {
+    userId
+    token
+    tokenExpiration
+  }
+}
+```
+
 # Mutations
 ```graphql
 mutation {

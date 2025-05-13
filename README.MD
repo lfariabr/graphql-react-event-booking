@@ -10,6 +10,7 @@
 - [x] Dynamic relations
 - [x] Adding Booking
 - [x] Refactoring our code
+- [ ] Authentication
 
 ...
 
@@ -39,3 +40,6 @@ https://www.youtube.com/watch?v=WcyYYD5xkuQ&list=PL55RiY5tL51rG1x02Yyj93iypUuHYX
 
 ## 9. Refactoring our code
 https://www.youtube.com/watch?v=6y44oPKfqXU&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=9
+
+## 10. Authentication
+https://www.youtube.com/watch?v=uk9YHJsOjVo&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=10

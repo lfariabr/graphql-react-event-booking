@@ -4,6 +4,8 @@ import { graphqlHTTP } from 'express-graphql';
 import mongoose from 'mongoose';
 import rootValue from './graphql/resolvers';
 import schema from './graphql/schema';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 

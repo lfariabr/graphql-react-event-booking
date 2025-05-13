@@ -1,8 +1,1 @@
-
-{
-    "env": {
-        "MONGO_DB_USERNAME": "lfariabr",
-        "MONGO_DB_PASSWORD": "2NK6Xd5PHCeIHSNT",
-        "MONGO_DB": "eventreactgraphql"
-    }
-}
+{}
