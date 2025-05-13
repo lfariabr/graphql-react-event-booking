@@ -4,7 +4,10 @@ import User from '../../models/User';
 import { transformBooking, transformEvent } from './transformers';
 
 export const bookingResolvers = {
-  bookings: async () => {
+  bookings: async (args: any, req: any) => {
+    if (!req.isAuth) {
+      throw new Error("Sorry to inform you, but you are not authorized! :-(");
+    }
     try {
       const bookings = await Booking.find()
         .populate({
@@ -22,21 +25,24 @@ export const bookingResolvers = {
     }
   },
 
-  bookEvent: async (args: any) => {
+  bookEvent: async (args: any, req: any) => {
+    if (!req.isAuth) {
+      throw new Error("Sorry to inform you, but you are not authorized! :-(");
+    }
     try {
       const event = await Event.findById(args.eventId);
       if (!event) {
-        throw new Error("Event not found!");
+        throw new Error("Sorry to inform you, but the event was not found! :-(");
       }
 
       const user = await User.findById(args.userId);
       if (!user) {
-        throw new Error("User not found!");
+        throw new Error("Sorry to inform you, but the user was not found! :-(");
       }
 
       const booking = new Booking({
         event: event._id,
-        user: user._id
+        user: req.userId
       });
 
       const result = await booking.save();
@@ -45,7 +51,7 @@ export const bookingResolvers = {
         .populate('user');
       
       if (!populateBooking) {
-        throw new Error("Booking not found!");
+        throw new Error("Sorry to inform you, but the booking was not found! :-(");
       }
       
       return transformBooking(populateBooking);
@@ -55,15 +61,18 @@ export const bookingResolvers = {
     }
   },
 
-  cancelBooking: async (args: any) => {
+  cancelBooking: async (args: any, req: any) => {
+    if (!req.isAuth) {
+      throw new Error("Sorry to inform you, but you are not authorized! :-(");
+    }
     try {
       // 1. Find and delete the booking
       const booking = await Booking.findByIdAndDelete(args.bookingId);
-      if (!booking) throw new Error("Booking not found!");
+      if (!booking) throw new Error("Sorry to inform you, but the booking was not found! :-(");
   
       // 2. Find the event
       const event = await Event.findById(booking.event);
-      if (!event) throw new Error("Event not found!");
+      if (!event) throw new Error("Sorry to inform you, but the event was not found! :-(");
   
       // 3. Get creator ID before modifying event
       const eventCreatorId = event.creator;

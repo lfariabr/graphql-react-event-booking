@@ -10,7 +10,7 @@
 - [x] Dynamic relations
 - [x] Adding Booking
 - [x] Refactoring our code
-- [ ] Authentication
+- [x] Authentication + Postman
 
 ...
 

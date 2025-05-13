@@ -18,7 +18,7 @@ export const userResolvers = {
     try {
       const existingUser = await User.findOne({ email: args.userInput.email });
       if (existingUser) {
-        throw new Error("User already exists.");
+        throw new Error("Sorry to inform you, but the user already exists.");
       }
 
       const hashPassword = await bcrypt.hash(args.userInput.password, 12);
@@ -31,7 +31,7 @@ export const userResolvers = {
       return transformUser(result);
     } catch (error: any) {
       console.error("Error creating user:", error?.message);
-      if (error?.message === "User already exists.") {
+      if (error?.message === "Sorry to inform you, but the user already exists.") {
         throw new Error(error.message);
       }
       throw new Error("Creating user failed!");
@@ -41,11 +41,11 @@ export const userResolvers = {
     try {
       const user = await User.findOne({ email: args.email });
       if (!user) {
-        throw new Error("User not found!");
+        throw new Error("Sorry to inform you, but the user was not found!");
       }
       const isPasswordValid = await bcrypt.compare(args.password, user.password);
       if (!isPasswordValid) {
-        throw new Error("Invalid password!");
+        throw new Error("Sorry to inform you, but the password is incorrect!");
       }
       const token = jwt.sign({ userId: user._id.toString() }, "secret", { expiresIn: "1h" });
       return { 

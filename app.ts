@@ -6,10 +6,12 @@ import rootValue from './graphql/resolvers';
 import schema from './graphql/schema';
 import dotenv from 'dotenv';
 dotenv.config();
+import { isAuth } from './middleware/isAuth';
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use(isAuth);
 
 app.use('/graphql', graphqlHTTP({
   schema,

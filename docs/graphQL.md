@@ -37,7 +37,7 @@ query {
   }
 }
 ```
-
+### Retrieve Token
 ```graphql
 query {
   login(email: "test@test.com", password: "test") {

@@ -19,11 +19,14 @@ export const eventResolvers = {
     }
   },
 
-  createEvent: async (args: any) => {
+  createEvent: async (args: any, req: any) => {
+    if (!req.isAuth) {
+      throw new Error("Sorry to inform you, but you are not authorized! :-(");
+    }
     try {
       const user = await User.findById(args.eventInput.creator);
       if (!user) {
-        throw new Error("User not found!");
+        throw new Error("Sorry to inform you, but the user was not found! :-(");
       }
 
       const event = new Event({
@@ -31,7 +34,7 @@ export const eventResolvers = {
         description: args.eventInput.description,
         price: +args.eventInput.price,
         date: new Date(args.eventInput.date),
-        creator: user._id
+        creator: req.userId
       });
 
       const savedEvent = await event.save();
