@@ -11,6 +11,8 @@
 - [x] Adding Booking
 - [x] Refactoring our code
 - [x] Authentication + Postman
+- [x] React app
+- [ ] Navbar
 
 ...
 
@@ -43,3 +45,11 @@ https://www.youtube.com/watch?v=6y44oPKfqXU&list=PL55RiY5tL51rG1x02Yyj93iypUuHYX
 
 ## 10. Authentication
 https://www.youtube.com/watch?v=uk9YHJsOjVo&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=10
+
+## 11. React app
+https://www.youtube.com/watch?v=JmFSGqbmzT4&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=11
+npx create-next-app@latest frontend --typescript
+npm run dev
+
+## 12. Navbar
+https://www.youtube.com/watch?v=0gCGzQvoB9o&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=12
