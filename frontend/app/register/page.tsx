@@ -1,5 +1,4 @@
 import styles from "../page.module.css";
-import Footer from "../components/Footer";
 import React from "react";
 
 const Register: React.FC = () => {
@@ -12,7 +11,6 @@ const Register: React.FC = () => {
                 <input type="password" placeholder="Password" />
                 <button type="submit">Register</button>
             </form>
-            <Footer />
         </div>
     );
 };

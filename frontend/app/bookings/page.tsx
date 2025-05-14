@@ -1,5 +1,5 @@
 import styles from "../page.module.css";
-import Footer from "../components/Footer";
+import Footer from "../components/Footer/Footer";
 import React from "react";
 
 const Bookings: React.FC = () => {
