@@ -1,7 +1,8 @@
 import styles from "../page.module.css";
 import Footer from "../components/Footer";
+import React from "react";
 
-export default function Register() {
+const Register: React.FC = () => {
     return (
         <div className={styles.page}>
             <h2>Register</h2>
@@ -14,4 +15,6 @@ export default function Register() {
             <Footer />
         </div>
     );
-}
+};
+
+export default Register;

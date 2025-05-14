@@ -1,7 +1,8 @@
 import Footer from "../components/Footer";
 import styles from "../page.module.css";
+import React from "react";
 
-export default function Login() {
+const Login: React.FC = () => {
     return (
         <div className={styles.page}>
             <h2>Login</h2>
@@ -13,4 +14,6 @@ export default function Login() {
             <Footer />
         </div>
     );
-}
+};
+
+export default Login;
