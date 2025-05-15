@@ -13,7 +13,8 @@
 - [x] Authentication + Postman
 - [x] React app
 - [x] Navbar
-- [ ] Hitting the API
+- [x] Hitting the API
+- [ ] Using the Token
 
 ...
 
@@ -57,3 +58,6 @@ https://www.youtube.com/watch?v=0gCGzQvoB9o&list=PL55RiY5tL51rG1x02Yyj93iypUuHYX
 
 ##### 13. Hitting the API
 https://www.youtube.com/watch?v=VdwH3RDRXNM&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=13
+
+##### 14. Using the Token
+https://www.youtube.com/watch?v=wMg_b1zZcag&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=14

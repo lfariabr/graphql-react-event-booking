@@ -121,6 +121,88 @@ a.secondary {
   transform: scale(1.05);
 }
 
+.form {
+  background: rgba(30, 30, 30, 0.95);
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  min-width: 320px;
+  max-width: 100%;
+}
+
+.form label {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  color: #e0e0e0;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.form input {
+  padding: 0.7rem 1rem;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #181818;
+  color: #e0e0e0;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+
+.form input:focus {
+  border: 1.5px solid #0070f3;
+  outline: none;
+  background: #222;
+}
+
+.button {
+  padding: 0.85rem 0;
+  background: #00ffab;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background 0.18s;
+  margin-top: 0.5rem;
+}
+
+.button:hover {
+  background: #00b97c;
+}
+
+.button:disabled {
+  background: #444;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #ff5252;
+  background: rgba(255,82,82,0.08);
+  padding: 0.5rem 0.8rem;
+  border-radius: 5px;
+  font-size: 0.97rem;
+  margin-bottom: 0.3rem;
+  text-align: center;
+}
+
+.link {
+  color: #00ffab;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.link:hover {
+  color: #00b97c;
+}
+
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   a.primary:hover {

@@ -5,11 +5,16 @@ import mongoose from 'mongoose';
 import rootValue from './graphql/resolvers';
 import schema from './graphql/schema';
 import dotenv from 'dotenv';
-dotenv.config();
 import { isAuth } from './middleware/isAuth';
+import cors from 'cors';
+dotenv.config();
 
 const app = express();
 
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true,
+}));
 app.use(bodyParser.json());
 app.use(isAuth);
 
@@ -27,8 +32,8 @@ mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.M
     console.error("Error connecting to MongoDB:", error);
   });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.listen(8000, () => {
+  console.log('Server is running on port 8000');
 });
 
 export default app;

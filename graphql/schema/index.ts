@@ -21,6 +21,7 @@ const schema = buildSchema(`
     type User {
       _id: ID!
       email: String!
+      name: String!
       password: String
       createdEvents: [Event!]!
       bookings: [Booking!]!
@@ -38,11 +39,12 @@ const schema = buildSchema(`
       price: Float!
       date: String!
       creator: ID!
-    }
+  }
 
     input UserInput {
       email: String!
       password: String!
+      name: String!
     }
     
     type RootQuery {

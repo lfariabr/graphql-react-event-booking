@@ -37,6 +37,36 @@ query {
   }
 }
 ```
+
+```graphql
+query {
+  users {
+    _id
+    email
+    name
+    createdEvents {
+      _id
+      title
+      description
+      price
+      date
+    }
+    bookings {
+      _id
+      event {
+        _id
+        title
+        description
+        price
+        date
+      }
+      createdAt
+      updatedAt
+    }
+  }
+}
+```
+
 ### Retrieve Token
 ```graphql
 query {
@@ -71,11 +101,13 @@ mutation {
 mutation {
   createUser (userInput:{
     email: "test@test.com",
-    password: "test"
+    password: "test",
+    name: "test"
   }) {
     _id
     email
     password
+    name
   }
 }
 ```

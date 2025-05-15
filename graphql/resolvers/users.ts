@@ -24,10 +24,12 @@ export const userResolvers = {
       const hashPassword = await bcrypt.hash(args.userInput.password, 12);
       const newUser = new User({
         email: args.userInput.email,
-        password: hashPassword
+        password: hashPassword,
+        name: args.userInput.name
       });
 
       const result = await newUser.save();
+      console.log("User created:", result);
       return transformUser(result);
     } catch (error: any) {
       console.error("Error creating user:", error?.message);
@@ -48,6 +50,7 @@ export const userResolvers = {
         throw new Error("Sorry to inform you, but the password is incorrect!");
       }
       const token = jwt.sign({ userId: user._id.toString() }, "secret", { expiresIn: "1h" });
+      console.log("Login successful:", user.email);
       return { 
         userId: user._id.toString(), 
         token: token, 
