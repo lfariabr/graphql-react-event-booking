@@ -4,18 +4,29 @@ import { useState, useEffect, useCallback } from "react";
 import { AuthContext } from "./auth-context";
 import { useRouter } from "next/navigation";
 
+// TODO: Implement token refresh and expiration handling
+// - Add token expiration handling
+// - Add refreshToken function 
+// - Add isTokenExpiringSoon check
+// - Set up auto-refresh logic
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
     const [token, setToken] = useState<string | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
     
-    const login = useCallback(async (newToken: string, newUserId: string) => {
+    const login = useCallback(async (newToken: string, newUserId: string, expiration: Date) => {
         setToken(newToken);
         setUserId(newUserId);
-        localStorage.setItem("userData", JSON.stringify({ 
-            token: newToken, 
-            userId: newUserId 
-        }));
+
+        // Store token and user ID in localStorage
+        const item = {
+            token: newToken,
+            userId: newUserId,
+            expiration: expiration.toISOString(),
+        };
+
+        localStorage.setItem("userData", JSON.stringify(item));
         console.log("Login successful:", newToken, newUserId);
     }, []);
 
@@ -27,19 +38,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.log("Logout successful");
     }, [router]);
 
-    // Auto login from localStorage
+    // Single useEffect for all auth-related side effects
     useEffect(() => {
+        // 1. Load token from localStorage on mount
         const storedData = localStorage.getItem('userData');
-        console.log("Auto login attempt:", storedData);
         if (storedData) {
-            const { token: storedToken, userId: storedUserId } = JSON.parse(storedData);
-            console.log("Auto login successful:", storedToken, storedUserId);
-            if (storedToken && storedUserId) {
+            try {
+                const { token: storedToken, userId: storedUserId, expiration } = JSON.parse(storedData);
+                const expirationDate = new Date(expiration);
+                const now = new Date();
+            
+            if (storedToken && storedUserId && expirationDate > now) {
                 setToken(storedToken);
                 setUserId(storedUserId);
+                console.log("Auto login successful");
+            } else {
+                console.log("Token expired or invalid, clearing...");
+                logout();
             }
+        } catch (error) {
+            console.error("Error parsing stored auth data:", error);
+            logout();
+        }
         }
     }, []);
+
 
     const value = {
         token,
@@ -48,7 +71,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         logout,
         isAuthenticated: !!token,
     };
-    
+
     return (
         <AuthContext.Provider value={value}>
             {children}

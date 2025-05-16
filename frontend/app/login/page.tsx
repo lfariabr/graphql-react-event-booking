@@ -52,7 +52,8 @@ const Login: React.FC = () => {
                 setError(data.errors[0].message || "Login failed");
             } else {
                 console.log("Login successful:", data.data.login.userId);
-                login(data.data.login.token, data.data.login.userId);
+                const expirationDate = new Date(data.data.login.tokenExpiration);
+                login(data.data.login.token, data.data.login.userId, expirationDate);
                 router.push("/events/view");
             }
             setLoading(false);

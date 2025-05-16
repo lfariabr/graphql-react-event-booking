@@ -55,6 +55,20 @@
     border-bottom: 2px solid #00ffab;
 }
 
+.button {
+    padding: 0.5rem 1.0rem;
+    border-radius: 8px;
+    background-color: #00ffab;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #00b97c;
+}
+
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;

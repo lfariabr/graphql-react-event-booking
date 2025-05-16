@@ -3,9 +3,10 @@ import { createContext, useContext } from "react";
 interface AuthContextType {
     token: string | null;
     userId: string | null;
-    login: (token: string, userId: string) => Promise<void>;
+    login: (token: string, userId: string, tokenExpiration: Date) => Promise<void>;
     logout: () => void;
     isAuthenticated: boolean;
+    // TODO: Add isTokenExpiringSoon method 
 }
 
 export const AuthContext = createContext<AuthContextType>({
