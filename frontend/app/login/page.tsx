@@ -2,6 +2,8 @@
 import styles from "../page.module.css";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+// frontend/app/context/auth-context.tsx
+import { useAuth } from "../context/auth-context";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState("");
@@ -9,6 +11,7 @@ const Login: React.FC = () => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const { login } = useAuth();
     
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -49,6 +52,7 @@ const Login: React.FC = () => {
                 setError(data.errors[0].message || "Login failed");
             } else {
                 console.log("Login successful:", data.data.login.userId);
+                login(data.data.login.token, data.data.login.userId);
                 router.push("/events/view");
             }
             setLoading(false);
