@@ -14,7 +14,8 @@
 - [x] React app
 - [x] Navbar
 - [x] Hitting the API
-- [ ] Using the Token
+- [x] Using the Token
+- [ ] Add modal for event creation
 
 ...
 
@@ -61,3 +62,6 @@ https://www.youtube.com/watch?v=VdwH3RDRXNM&list=PL55RiY5tL51rG1x02Yyj93iypUuHYX
 
 ##### 14. Using the Token
 https://www.youtube.com/watch?v=wMg_b1zZcag&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=14
+
+##### 15. Add modal for event creation
+https://www.youtube.com/watch?v=2rXtTi0Pn9E&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=15
