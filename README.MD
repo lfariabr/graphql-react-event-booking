@@ -15,7 +15,9 @@
 - [x] Navbar
 - [x] Hitting the API
 - [x] Using the Token
-- [ ] Add modal for event creation
+- [x] Add modal for event creation
+- [x] Add event creation frontend + backend
+- [x] Add event features
 
 ...
 
@@ -65,3 +67,9 @@ https://www.youtube.com/watch?v=wMg_b1zZcag&list=PL55RiY5tL51rG1x02Yyj93iypUuHYX
 
 ##### 15. Add modal for event creation
 https://www.youtube.com/watch?v=2rXtTi0Pn9E&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=15
+
+##### 16. Add event creation frontend + backend
+https://www.youtube.com/watch?v=2rXtTi0Pn9E&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=16
+
+##### 17. Add event features
+https://www.youtube.com/watch?v=VyICeJW9vDI&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=17

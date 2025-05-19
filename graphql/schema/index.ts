@@ -18,6 +18,10 @@ const schema = buildSchema(`
       creator: User
       createdAt: String!
       updatedAt: String!
+      location: String
+      capacity: Int
+      attendees: Int
+      status: String
     }
 
     type User {

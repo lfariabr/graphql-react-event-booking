@@ -5,15 +5,15 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon, Loader2 } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/app/components/ui/use-toast';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Button } from '@/app/components/ui/button';
+import { Input } from '@/app/components/ui/input';
+import { Label } from '@/app/components/ui/label';
+import { Textarea } from '@/app/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
+import { Calendar } from '@/app/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/app/components/ui/popover';
 import { cn } from '@/lib/utils';
 
 interface EventFormData {

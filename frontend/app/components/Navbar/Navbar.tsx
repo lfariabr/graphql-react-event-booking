@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import styles from './Navbar.module.css';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '../../context/auth-context';
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import { LogOut } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Navbar: React.FC = () => {
     const pathname = usePathname();
@@ -33,51 +33,96 @@ const Navbar: React.FC = () => {
     }, [getTokenExpiration]);
     
     return (
-        <nav className={styles.navbar}>
-            <div className={styles.logo}>
-                <Link href="/">
-                    <Image
-                        src="/logo.png"
-                        alt="BooQme Logo"
-                        width={80}
-                        height={80}
-                        priority
-                    />
-                </Link>
-            </div>
-            <ul className={styles.navLinks}>
-                <li><Link href="/" className={isActive("/") ? styles.active : ""}>Home</Link></li>
-                {isAuthenticated ? (
-                    <>
-                        <li><Link href="/events/create" className={isActive("/events/create") ? styles.active : ""}>Create Event</Link></li>
-                        <li><Link href="/events/view" className={isActive("/events/view") ? styles.active : ""}>View Events</Link></li>
-                        <li><Link href="/bookings" className={isActive("/bookings") ? styles.active : ""}>Bookings</Link></li>
-                        <li className="flex items-center gap-2">
+        <header className="border-b">
+            <div className="container flex h-16 items-center justify-between px-4">
+                <div className="flex items-center space-x-8">
+                    <Link href="/" className="flex items-center space-x-2">
+                        <Image
+                            src="/logo.png"
+                            alt="BooQme Logo"
+                            width={40}
+                            height={40}
+                            priority
+                            className="h-10 w-10"
+                        />
+                        <span className="text-lg font-semibold">BooQme</span>
+                    </Link>
+                    
+                    <nav className="hidden md:flex items-center space-x-4">
+                        <Link 
+                            href="/" 
+                            className={cn(
+                                "text-sm font-medium transition-colors hover:text-primary",
+                                isActive("/") ? "text-primary" : "text-muted-foreground"
+                            )}
+                        >
+                            Home
+                        </Link>
+                        
+                        {isAuthenticated && (
+                            <>
+                                <Link 
+                                    href="/events/create"
+                                    className={cn(
+                                        "text-sm font-medium transition-colors hover:text-primary",
+                                        isActive("/events/create") ? "text-primary" : "text-muted-foreground"
+                                    )}
+                                >
+                                    Create Event
+                                </Link>
+                                <Link 
+                                    href="/events/view"
+                                    className={cn(
+                                        "text-sm font-medium transition-colors hover:text-primary",
+                                        isActive("/events/view") ? "text-primary" : "text-muted-foreground"
+                                    )}
+                                >
+                                    View Events
+                                </Link>
+                                <Link 
+                                    href="/bookings"
+                                    className={cn(
+                                        "text-sm font-medium transition-colors hover:text-primary",
+                                        isActive("/bookings") ? "text-primary" : "text-muted-foreground"
+                                    )}
+                                >
+                                    Bookings
+                                </Link>
+                            </>
+                        )}
+                    </nav>
+                </div>
+
+                <div className="flex items-center gap-4">
+                    {isAuthenticated ? (
+                        <div className="flex items-center gap-4">
                             <span className="text-sm text-muted-foreground">{timeLeft}</span>
                             <Button 
-                                variant="ghost" 
+                                variant="outline" 
                                 size="sm" 
                                 onClick={() => logout()}
                                 className="gap-2"
                             >
                                 <LogOut className="h-4 w-4" />
-                                Logout
+                                Sign out
                             </Button>
-                        </li>
-                    </>
-                ) : (
-                    <Link href="/login">
+                        </div>
+                    ) : (
+                        <Link href="/login">
                             <Button 
                                 variant="outline" 
                                 size="sm"
-                                className={isActive("/login") ? "bg-accent" : ""}
+                                className={cn(
+                                    isActive("/login") && "bg-accent text-accent-foreground"
+                                )}
                             >
-                                Login
+                                Sign in
                             </Button>
                         </Link>
-                )}
-            </ul>
-        </nav>
+                    )}
+                </div>
+            </div>
+        </header>
     );
 };
 
