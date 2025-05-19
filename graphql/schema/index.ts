@@ -16,6 +16,8 @@ const schema = buildSchema(`
       price: Float!
       date: String!
       creator: User
+      createdAt: String!
+      updatedAt: String!
     }
 
     type User {

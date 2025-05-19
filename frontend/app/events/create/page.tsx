@@ -4,7 +4,7 @@ import { useAuth } from '../../context/auth-context';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 import { Button } from '@/components/ui/button';
@@ -24,7 +24,7 @@ interface EventFormData {
 }
 
 export default function CreateEvent() {
-  const { isAuthenticated, token } = useAuth();
+  const { isAuthenticated, token, userId } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -53,33 +53,115 @@ export default function CreateEvent() {
     setFormData(prev => ({ ...prev, date }));
   };
 
+  const validateForm = (): boolean => {
+    if (!formData.title.trim()) {
+      toast({
+        title: 'Error',
+        description: 'Title is required',
+        variant: 'destructive',
+      });
+      return false;
+    }
+  
+    if (!formData.date) {
+      toast({
+        title: 'Error',
+        description: 'Please select a date',
+        variant: 'destructive',
+      });
+      return false;
+    }
+  
+    if (formData.price < 0) {
+      toast({
+        title: 'Error',
+        description: 'Price cannot be negative',
+        variant: 'destructive',
+      });
+      return false;
+    }
+  
+    return true;
+  };
+
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      description: '',
+      price: 0,
+      date: undefined,
+    });
+    setLoading(false);
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
+    if (!validateForm()) {
+      setLoading(false);
+      return;
+    }
+    
     try {
       // TODO: Replace with your actual API call
-      const response = await fetch('/api/events', {
+      const response = await fetch('http://localhost:8000/graphql', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          query: `
+            mutation CreateEvent($eventInput: EventInput!) {
+              createEvent(eventInput: $eventInput) {
+                _id
+                title
+                description
+                price
+                date
+                creator {
+                  _id
+                  email
+                }
+              }
+            }
+          `,
+          variables: {
+            eventInput: {
+              title: formData.title,
+              description: formData.description,
+              price: formData.price,
+              date: formData.date,
+              creator: userId,
+            },
+          },
+        })
       });
+      const responseData = await response.json();
+      console.log('API Response:', responseData); // Log the full response
 
-      if (!response.ok) throw new Error('Failed to create event');
+      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+
+      if (responseData.errors) {
+        console.error('GraphQL Errors:', responseData.errors);
+        throw new Error(responseData.errors[0]?.message || 'Failed to create event');
+      }
       
-      toast({
-        title: 'Success!',
-        description: 'Event created successfully',
-      });
-      
-      router.push('/events/view');
+      if (responseData.data.createEvent) {
+        toast({
+          title: 'Success!',
+          description: 'Event created successfully',
+        });
+        resetForm();
+        router.push('/events/view');
+      }
+  
     } catch (error) {
+      console.error('Error details:', error);
       toast({
         title: 'Error',
-        description: 'Failed to create event',
+        description: error instanceof Error ? error.message : 'Failed to create event',
         variant: 'destructive',
       });
     } finally {
@@ -152,19 +234,34 @@ export default function CreateEvent() {
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {formData.date ? (
-                        format(formData.date, "PPP")
+                        format(formData.date, "PPPp")
                       ) : (
-                        <span>Pick a date</span>
+                        <span>Pick a date and time</span>
                       )}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="w-auto p-0">
                     <Calendar
                       mode="single"
                       selected={formData.date}
                       onSelect={handleDateSelect}
                       initialFocus
                     />
+                    <div className="p-3 border-t">
+                      <input
+                        type="time"
+                        value={formData.date ? format(formData.date, 'HH:mm') : ''}
+                        onChange={(e) => {
+                          const [hours, minutes] = e.target.value.split(':').map(Number);
+                          if (formData.date) {
+                            const newDate = new Date(formData.date);
+                            newDate.setHours(hours, minutes);
+                            handleDateSelect(newDate);
+                          }
+                        }}
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
                   </PopoverContent>
                 </Popover>
               </div>
@@ -179,8 +276,15 @@ export default function CreateEvent() {
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading}>
-                {loading ? 'Creating...' : 'Create Event'}
+              <Button type="submit" disabled={loading} className="gap-2">
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  'Create Event'
+                )}
               </Button>
             </div>
           </form>

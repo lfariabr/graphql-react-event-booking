@@ -6,7 +6,9 @@ export const transformEvent = (event: any) => {
     ...eventObj,
     _id: eventObj._id.toString(),
     creator: eventObj.creator,
-    ...(eventObj.date && { date: dateToString(eventObj.date) })
+    ...(eventObj.date && { date: dateToString(eventObj.date) }),
+    createdAt: eventObj.createdAt ? dateToString(eventObj.createdAt) : new Date().toISOString(),
+    updatedAt: eventObj.updatedAt ? dateToString(eventObj.updatedAt) : new Date().toISOString()
   };
 };
 

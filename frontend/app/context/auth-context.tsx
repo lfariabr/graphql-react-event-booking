@@ -3,7 +3,8 @@ import { createContext, useContext } from "react";
 interface AuthContextType {
     token: string | null;
     userId: string | null;
-    login: (token: string, userId: string, tokenExpiration: Date) => Promise<void>;
+    userName: string | null;
+    login: (token: string, userId: string, userName: string, tokenExpiration: Date) => Promise<void>;
     logout: () => void;
     isAuthenticated: boolean;
     getTokenExpiration: () => { 
@@ -16,6 +17,7 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType>({
     token: null,
     userId: null,
+    userName: null,
     login: async () => {},
     logout: () => {},
     isAuthenticated: false,

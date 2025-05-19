@@ -4,23 +4,20 @@ import { useState, useEffect, useCallback } from "react";
 import { AuthContext } from "./auth-context";
 import { useRouter } from "next/navigation";
 
-// TODO: Implement token refresh and expiration handling
-// - Add token expiration handling
-// - Add refreshToken function 
-// - Add isTokenExpiringSoon check
-// - Set up auto-refresh logic
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
     const [token, setToken] = useState<string | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
+    const [userName, setUserName] = useState<string | null>(null);
     
-    const login = useCallback(async (newToken: string, newUserId: string) => {
+    const login = useCallback(async (newToken: string, newUserId: string, newUserName: string) => {
         setToken(newToken);
         setUserId(newUserId);
+        setUserName(newUserName);
         const item = {
             token: newToken,
             userId: newUserId,
+            userName: newUserName,
         };
         localStorage.setItem("userData", JSON.stringify(item));
 
