@@ -6,7 +6,11 @@ interface AuthContextType {
     login: (token: string, userId: string, tokenExpiration: Date) => Promise<void>;
     logout: () => void;
     isAuthenticated: boolean;
-    // TODO: Add isTokenExpiringSoon method 
+    getTokenExpiration: () => { 
+        isExpired: boolean; 
+        expiresIn: number; // milliseconds until expiration
+        expiresAt: Date | null;
+    };
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -15,6 +19,7 @@ export const AuthContext = createContext<AuthContextType>({
     login: async () => {},
     logout: () => {},
     isAuthenticated: false,
+    getTokenExpiration: () => ({ isExpired: false, expiresIn: 0, expiresAt: null }),
 });
 
 export const useAuth = () => {

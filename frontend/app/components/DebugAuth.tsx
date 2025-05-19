@@ -2,10 +2,31 @@
 "use client";
 
 import { useAuth } from "../context/auth-context";
+import { useEffect, useState } from 'react';
 
 export default function DebugAuth() {
   const { token, userId, isAuthenticated, logout } = useAuth();
-  
+  const { getTokenExpiration } = useAuth();
+  const [timeLeft, setTimeLeft] = useState('--:--');
+
+  useEffect(() => {
+    const update = () => {
+        const { isExpired, expiresIn } = getTokenExpiration();
+        if (isExpired) {
+            setTimeLeft('Expired');
+            return;
+        }
+        
+        const minutes = Math.floor(expiresIn / 60000);
+        const seconds = Math.floor((expiresIn % 60000) / 1000);
+        setTimeLeft(`${minutes}:${seconds.toString().padStart(2, '0')}`);
+    };
+    
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+}, [getTokenExpiration]);
+
   return (
     <div style={{
       position: 'fixed',
@@ -39,6 +60,7 @@ export default function DebugAuth() {
           Logout
         </button>
       )}
+      <p>Token expires in: {timeLeft}</p>
     </div>
   );
 }

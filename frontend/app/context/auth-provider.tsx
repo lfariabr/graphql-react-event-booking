@@ -15,20 +15,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
     
-    const login = useCallback(async (newToken: string, newUserId: string, expiration: Date) => {
+    const login = useCallback(async (newToken: string, newUserId: string) => {
         setToken(newToken);
         setUserId(newUserId);
-
-        // Store token and user ID in localStorage
         const item = {
             token: newToken,
             userId: newUserId,
-            expiration: expiration.toISOString(),
         };
-
         localStorage.setItem("userData", JSON.stringify(item));
+
         console.log("Login successful:", newToken, newUserId);
     }, []);
+
+    const decodeToken = (token: string) => {
+        try {
+            return JSON.parse(atob(token.split('.')[1]));
+        } catch (error) {
+            return null;
+        }
+    }
 
     const logout = useCallback(() => {
         setToken(null);
@@ -38,31 +43,85 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.log("Logout successful");
     }, [router]);
 
+    const getTokenExpiration = useCallback((): { 
+        isExpired: boolean; 
+        expiresIn: number; // milliseconds until expiration
+        expiresAt: Date | null;
+    } => {
+        if (!token) return { 
+            isExpired: true, 
+            expiresIn: 0, 
+            expiresAt: null 
+        };
+    
+        try {
+            const decoded = decodeToken(token);
+            if (!decoded?.exp) {
+                return { 
+                    isExpired: true, 
+                    expiresIn: 0, 
+                    expiresAt: null 
+                };
+            }
+    
+            const expiresAt = new Date(decoded.exp * 1000);
+            const expiresIn = expiresAt.getTime() - Date.now();
+            
+            return {
+                isExpired: expiresIn <= 0,
+                expiresIn: Math.max(0, expiresIn), // Never return negative
+                expiresAt
+            };
+        } catch {
+            return { 
+                isExpired: true, 
+                expiresIn: 0, 
+                expiresAt: null 
+            };
+        }
+    }, [token]);
+
     // Single useEffect for all auth-related side effects
     useEffect(() => {
-        // 1. Load token from localStorage on mount
         const storedData = localStorage.getItem('userData');
-        if (storedData) {
-            try {
-                const { token: storedToken, userId: storedUserId, expiration } = JSON.parse(storedData);
-                const expirationDate = new Date(expiration);
-                const now = new Date();
-            
-            if (storedToken && storedUserId && expirationDate > now) {
-                setToken(storedToken);
-                setUserId(storedUserId);
-                console.log("Auto login successful");
-            } else {
-                console.log("Token expired or invalid, clearing...");
-                logout();
+        if (!storedData) return;
+        
+        try {
+            const { token: storedToken, userId: storedUserId } = JSON.parse(storedData);
+
+            if (!storedToken || !storedUserId) {
+                throw new Error("Invalid auth data");
             }
+            
+            const decodedToken = decodeToken(storedToken);
+            if (!decodedToken) {
+                throw new Error("Invalid token");
+            }
+
+            const isExpired = decodedToken.exp * 1000 < Date.now();
+            if (isExpired) {
+                console.log("Token expired, clearing...");
+                logout();
+                return;
+            }
+
+            setToken(storedToken);
+            setUserId(storedUserId);
+            console.log("Auto login successful");
+
+            const timeUntilExpiration = decodedToken.exp * 1000 - Date.now();
+            const logoutTimer = setTimeout(() => {
+                console.log("Token expired, logging out...");
+                logout();
+            }, timeUntilExpiration);
+
+            return () => clearTimeout(logoutTimer);
+            
         } catch (error) {
             console.error("Error parsing stored auth data:", error);
             logout();
         }
-        }
-    }, []);
-
+    }, [logout]);
 
     const value = {
         token,
@@ -70,6 +129,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         login,
         logout,
         isAuthenticated: !!token,
+        getTokenExpiration,
     };
 
     return (
@@ -78,4 +138,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         </AuthContext.Provider>
     );
 };
+
+export default AuthProvider;
         
