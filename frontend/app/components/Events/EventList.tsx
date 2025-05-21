@@ -123,16 +123,65 @@ export default function EventList() {
 
   const handleBook = async (id: string) => {
     try {
-      console.log('Book for event:', id);
-      toast({
-        title: 'Booking',
-        description: 'Successfully booked for the event!',
+      if (!token || !userId) {
+        toast({
+          title: 'Authentication required',
+          description: 'Please log in to book an event',
+          variant: 'destructive',
+        })
+        return;
+      }
+      
+      const response = await fetch('http://localhost:8000/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          query: `
+            mutation BookEvent($eventId: ID!, $userId: ID!) {
+              bookEvent(eventId: $eventId, userId: $userId) {
+                _id
+                event {
+                  _id
+                  title
+                }
+                user {
+                  _id
+                  email
+                }
+                createdAt
+              }
+            }
+          `,
+          variables: {
+            eventId: id,
+            userId: userId
+          }
+        }),
       });
-    } catch (error) {
-      console.error('Error registering for event:', error);
+
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.errors?.[0]?.message || 'Failed to book event');
+      }
+
+      if (responseData.errors) {
+        throw new Error(responseData.errors[0].message);
+      }
+      console.log('Booking confirmed:', responseData.data.bookEvent);
       toast({
-        title: 'Error',
-        description: 'Failed to register for the event',
+        title: 'Booking Successful',
+        description: `You've successfully booked "${responseData.data.bookEvent.event.title}"`,
+      });
+      router.refresh();
+    } catch (error) {
+      console.error('Error booking event:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to book the event';
+      toast({
+        title: 'Booking Failed',
+        description: errorMessage,
         variant: 'destructive',
       });
     }
