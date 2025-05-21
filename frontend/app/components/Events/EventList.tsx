@@ -21,13 +21,7 @@ interface Event {
   };
   createdAt: string;
   updatedAt: string;
-  // These fields are in your mock data but not in the schema
-  // You might want to add them to your schema
-  location?: string;
-  capacity?: number;
-  attendees?: number;
   status?: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
-  imageUrl?: string;
 }
 
 export default function EventList() {
@@ -36,7 +30,7 @@ export default function EventList() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('all');
-  const { token } = useAuth();
+  const { token, userId } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -88,11 +82,7 @@ export default function EventList() {
         const transformedEvents = responseData.data.events.map((event: any) => ({
           ...event,
           // Add default values for fields not in the schema
-          location: 'Location not specified', // Default value
-          capacity: 100, // Default value
-          attendees: 0, // Default value
           status: 'upcoming', // Default value
-          imageUrl: 'https://images.unsplash.com/photo-1505373877841-8d25f96d5518?w=800&auto=format&fit=crop&q=60' // Default image
         }));
 
         setEvents(transformedEvents);
@@ -117,7 +107,7 @@ export default function EventList() {
     const matchesTab = 
       activeTab === 'all' || 
       (activeTab === 'myEvents' 
-        ? event.creator._id === useAuth().userId 
+        ? event.creator._id === userId 
         : event.status === activeTab);
     
     const matchesSearch = 
@@ -131,13 +121,12 @@ export default function EventList() {
     router.push(`/events/${id}`);
   };
 
-  const handleRegister = async (id: string) => {
+  const handleBook = async (id: string) => {
     try {
-      // TODO: Implement registration logic
-      console.log('Register for event:', id);
+      console.log('Book for event:', id);
       toast({
-        title: 'Registration',
-        description: 'Successfully registered for the event!',
+        title: 'Booking',
+        description: 'Successfully booked for the event!',
       });
     } catch (error) {
       console.error('Error registering for event:', error);
@@ -214,14 +203,12 @@ export default function EventList() {
               title={event.title}
               description={event.description}
               date={new Date(event.date)}
-              duration={120} // You might want to add this to your API
-              location={event.location}
-              capacity={event.capacity}
-              attendees={event.attendees}
-              status={event.status}
-              imageUrl={event.imageUrl}
+              status={event.status || 'upcoming'}
+              isCreator={event.creator._id === userId}
+              price={event.price}
+              creatorEmail={event.creator.email}
               onViewDetails={handleViewDetails}
-              onRegister={handleRegister}
+              onBook={handleBook}
             />
           ))}
         </div>

@@ -1,9 +1,9 @@
-
 import { Calendar, Clock, MapPin, Users } from 'lucide-react';
 import { Button } from "@/app/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 import { format } from 'date-fns';
+import { Popover, PopoverContent, PopoverTrigger } from "@/app/components/ui/popover";
 
 type EventStatus = 'upcoming' | 'ongoing' | 'completed' | 'cancelled' | 'myEvents';
 
@@ -12,14 +12,12 @@ interface EventItemProps {
   title: string;
   description: string;
   date: Date;
-  duration: number; // in minutes
-  location: string;
-  capacity: number;
-  attendees: number;
   status: EventStatus;
-  imageUrl?: string;
+  isCreator?: boolean; // New prop to indicate if the current user created this event
+  price?: number; // Added price
+  creatorEmail?: string; // Added creator email
   onViewDetails?: (id: string) => void;
-  onRegister?: (id: string) => void;
+  onBook?: (id: string) => void;
 }
 
 export default function EventItem({
@@ -27,14 +25,12 @@ export default function EventItem({
   title,
   description,
   date,
-  duration,
-  location,
-  capacity,
-  attendees,
   status,
-  imageUrl,
+  isCreator = false, // Default to false
+  price = 0, // Default price
+  creatorEmail = '',
   onViewDetails,
-  onRegister
+  onBook
 }: EventItemProps) {
   const statusVariant = {
     upcoming: 'bg-blue-100 text-blue-800 hover:bg-blue-100',
@@ -46,19 +42,14 @@ export default function EventItem({
 
   return (
     <Card className="w-full max-w-md overflow-hidden transition-shadow hover:shadow-lg">
-      {imageUrl && (
-        <div className="h-48 overflow-hidden">
-          <img
-            src={imageUrl}
-            alt={title}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )}
-      
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start gap-2">
-          <CardTitle className="text-xl font-bold line-clamp-2">{title}</CardTitle>
+          <div className="flex flex-col">
+            <CardTitle className="text-xl font-bold line-clamp-2">{title}</CardTitle>
+            {isCreator && (
+              <span className="text-xs text-emerald-600 font-medium">You created this event</span>
+            )}
+          </div>
           <Badge className={statusVariant[status]}>{status}</Badge>
         </div>
         <CardDescription className="line-clamp-2">{description}</CardDescription>
@@ -69,43 +60,47 @@ export default function EventItem({
           <Calendar className="mr-2 h-4 w-4" />
           <span>{format(date, 'PPP')}</span>
         </div>
-        
-        <div className="flex items-center text-sm text-muted-foreground">
-          <Clock className="mr-2 h-4 w-4" />
-          <span>{format(date, 'p')} • {duration} min</span>
-        </div>
-        
-        <div className="flex items-center text-sm text-muted-foreground">
-          <MapPin className="mr-2 h-4 w-4 flex-shrink-0" />
-          <span className="truncate">{location}</span>
-        </div>
-        
-        <div className="flex items-center text-sm text-muted-foreground">
-          <Users className="mr-2 h-4 w-4" />
-          <span>{attendees} of {capacity} attending</span>
-          <div className="ml-auto w-1/2 h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-primary" 
-              style={{ width: `${Math.min(100, (attendees / capacity) * 100)}%` }}
-            />
-          </div>
-        </div>
       </CardContent>
       
       <CardFooter className="flex justify-between pt-0">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button 
+              variant="outline" 
+              size="sm"
+            >
+              View Details
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80 p-0 bg-white" align="center">
+            <div className="p-4">
+              <h3 className="text-lg font-semibold mb-2">{title}</h3>
+              <p className="text-sm text-gray-700 mb-4">{description}</p>
+              
+              <div className="space-y-2">
+                <div className="flex items-center text-sm">
+                  <Calendar className="mr-2 h-4 w-4 text-gray-500" />
+                  <span>{format(date, 'PPP')}</span>
+                </div>
+                
+                <div className="flex items-center text-sm">
+                  <Users className="mr-2 h-4 w-4 text-gray-500" />
+                  <span>Organizer: {creatorEmail}</span>
+                </div>
+                
+                <div className="flex items-center text-sm">
+                  <span className="font-medium">Price: ${price.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
         <Button 
-          variant="outline" 
           size="sm"
-          onClick={() => onViewDetails?.(id)}
-        >
-          View Details
-        </Button>
-        <Button 
-          size="sm"
-          onClick={() => onRegister?.(id)}
+          onClick={() => onBook?.(id)}
           disabled={status === 'completed' || status === 'cancelled'}
         >
-          Register
+          Book
         </Button>
       </CardFooter>
     </Card>

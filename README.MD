@@ -18,6 +18,7 @@
 - [x] Add modal for event creation
 - [x] Add event creation frontend + backend
 - [x] Add event features
+- [ ] add bookings
 
 ...
 
