@@ -1,5 +1,5 @@
 // cd scripts
-// node deleteEvents.ts
+// node deleteBookings.ts
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -13,10 +13,10 @@ const uri = `mongodb+srv://${MONGO_DB_USERNAME}:${MONGO_DB_PASSWORD}@${MONGO_DB}
 (async () => {
   try {
     await mongoose.connect(uri);
-    const result = await mongoose.connection.collection('events').deleteMany({});
-    console.log(`✅ Deleted ${result.deletedCount} documents from 'events'`);
+    const result = await mongoose.connection.collection('bookings').deleteMany({});
+    console.log(`✅ Deleted ${result.deletedCount} documents from 'bookings'`);
   } catch (err) {
-    console.error('❌ Failed to delete events:', err);
+    console.error('❌ Failed to delete bookings:', err);
   } finally {
     await mongoose.disconnect();
   }

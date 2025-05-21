@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/app/components/ui/badge";
 import { format } from 'date-fns';
 import { Popover, PopoverContent, PopoverTrigger } from "@/app/components/ui/popover";
+import React from 'react';
 
 type EventStatus = 'upcoming' | 'ongoing' | 'completed' | 'cancelled' | 'myEvents';
 
@@ -13,11 +14,12 @@ interface EventItemProps {
   description: string;
   date: Date;
   status: EventStatus;
-  isCreator?: boolean; // New prop to indicate if the current user created this event
-  price?: number; // Added price
-  creatorEmail?: string; // Added creator email
+  isCreator?: boolean; 
+  price?: number; 
+  creatorEmail?: string; 
   onViewDetails?: (id: string) => void;
   onBook?: (id: string) => void;
+  isBooking?: boolean; 
 }
 
 export default function EventItem({
@@ -26,11 +28,12 @@ export default function EventItem({
   description,
   date,
   status,
-  isCreator = false, // Default to false
-  price = 0, // Default price
+  isCreator = false, 
+  price = 0, 
   creatorEmail = '',
   onViewDetails,
-  onBook
+  onBook,
+  isBooking = false
 }: EventItemProps) {
   const statusVariant = {
     upcoming: 'bg-blue-100 text-blue-800 hover:bg-blue-100',
@@ -39,6 +42,52 @@ export default function EventItem({
     cancelled: 'bg-red-100 text-red-800 hover:bg-red-100',
     myEvents: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100',
   };
+
+  // Check if this event is already booked
+  const [isBooked, setIsBooked] = React.useState(false);
+  
+  React.useEffect(() => {
+    // Check localStorage for booking data
+    const checkIfBooked = () => {
+      try {
+        // First check in the array of bookings
+        const userBookingsStr = localStorage.getItem('userBookings');
+        if (userBookingsStr) {
+          const userBookings = JSON.parse(userBookingsStr);
+          if (userBookings && Array.isArray(userBookings) && userBookings.some(booking => 
+            booking && booking.event && booking.event._id === id
+          )) {
+            setIsBooked(true);
+            return;
+          }
+        }
+        
+        // Fallback to legacy single booking check
+        const bookingData = localStorage.getItem('latestBooking');
+        if (bookingData) {
+          const booking = JSON.parse(bookingData);
+          if (booking && booking.event && booking.event._id === id) {
+            setIsBooked(true);
+          }
+        }
+      } catch (e) {
+        console.error('Error checking booking status:', e);
+      }
+    };
+    
+    // Check immediately and also when storage changes
+    checkIfBooked();
+    
+    const handleStorageChange = () => {
+      checkIfBooked();
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [id]);
+
+  // Combine local state with prop for immediate feedback
+  const isEventBooked = isBooked || isBooking;
 
   return (
     <Card className="w-full max-w-md overflow-hidden transition-shadow hover:shadow-lg">
@@ -97,10 +146,12 @@ export default function EventItem({
         </Popover>
         <Button 
           size="sm"
-          onClick={() => onBook?.(id)}
-          disabled={status === 'completed' || status === 'cancelled'}
+          onClick={() => !isEventBooked && onBook?.(id)}
+          disabled={status === 'completed' || status === 'cancelled' || isEventBooked}
+          variant={isEventBooked ? "outline" : "default"}
+          className={isEventBooked ? "border-green-500 bg-green-100 text-green-700 hover:bg-green-100 hover:text-green-800" : ""}
         >
-          Book
+          {isEventBooked ? "Booked" : "Book"}
         </Button>
       </CardFooter>
     </Card>

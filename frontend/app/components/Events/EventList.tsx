@@ -30,6 +30,7 @@ export default function EventList() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('all');
+  const [bookedEventIds, setBookedEventIds] = useState<string[]>([]);
   const { token, userId } = useAuth();
   const router = useRouter();
 
@@ -78,11 +79,9 @@ export default function EventList() {
           throw new Error(responseData.errors[0].message);
         }
 
-        // Transform the data to match EventItem props
         const transformedEvents = responseData.data.events.map((event: any) => ({
           ...event,
-          // Add default values for fields not in the schema
-          status: 'upcoming', // Default value
+          status: 'upcoming', 
         }));
 
         setEvents(transformedEvents);
@@ -132,6 +131,8 @@ export default function EventList() {
         return;
       }
       
+      setBookedEventIds(prev => [...prev, id]);
+      
       const response = await fetch('http://localhost:8000/graphql', {
         method: 'POST',
         headers: {
@@ -166,18 +167,39 @@ export default function EventList() {
       if (!response.ok) {
         throw new Error(responseData.errors?.[0]?.message || 'Failed to book event');
       }
-
       if (responseData.errors) {
         throw new Error(responseData.errors[0].message);
       }
-      console.log('Booking confirmed:', responseData.data.bookEvent);
+      
+      if (responseData.data && responseData.data.bookEvent) {
+        let storedBookings = [];
+        try {
+          const existingData = localStorage.getItem('userBookings');
+          if (existingData) {
+            storedBookings = JSON.parse(existingData);
+          }
+        } catch (e) {
+          console.error('Error parsing stored bookings:', e);
+        }
+        
+        const newBooking = responseData.data.bookEvent;
+        const bookingExists = storedBookings.some((b: any) => b._id === newBooking._id);
+        
+        if (!bookingExists) {
+          storedBookings.push(newBooking);
+          localStorage.setItem('userBookings', JSON.stringify(storedBookings));
+        }
+        
+        localStorage.setItem('latestBooking', JSON.stringify(responseData.data.bookEvent));
+        localStorage.setItem('bookingConfirmed', new Date().toISOString());
+      }
+      
       toast({
         title: 'Booking Successful',
         description: `You've successfully booked "${responseData.data.bookEvent.event.title}"`,
       });
       router.refresh();
     } catch (error) {
-      console.error('Error booking event:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to book the event';
       toast({
         title: 'Booking Failed',
@@ -258,6 +280,7 @@ export default function EventList() {
               creatorEmail={event.creator.email}
               onViewDetails={handleViewDetails}
               onBook={handleBook}
+              isBooking={bookedEventIds.includes(event._id)}
             />
           ))}
         </div>
