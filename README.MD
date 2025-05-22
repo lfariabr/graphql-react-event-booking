@@ -18,8 +18,9 @@
 - [x] Add modal for event creation
 - [x] Add event creation frontend + backend
 - [x] Add event features
-- [ ] add bookings
-
+- [x] add bookings
+- [x] cancel bookings
+- [ ] adding dataloader
 ...
 
 ##### 1. What is GraphQL?
@@ -74,3 +75,12 @@ https://www.youtube.com/watch?v=2rXtTi0Pn9E&list=PL55RiY5tL51rG1x02Yyj93iypUuHYX
 
 ##### 17. Add event features
 https://www.youtube.com/watch?v=VyICeJW9vDI&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=17
+
+##### 18. Add bookings
+https://www.youtube.com/watch?v=VyICeJW9vDI&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=18
+
+##### 19. Cancel bookings
+https://www.youtube.com/watch?v=VyICeJW9vDI&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=19
+
+##### 20. Adding dataloader
+https://www.youtube.com/watch?v=GWugdZES05U&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=20
