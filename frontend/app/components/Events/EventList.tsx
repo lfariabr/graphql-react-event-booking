@@ -83,6 +83,9 @@ export default function EventList() {
           ...event,
           status: 'upcoming', 
         }));
+        console.log('Response status:', response.status);
+        console.log('Response data:', responseData);
+        console.log('Events data:', responseData.data?.events);
 
         setEvents(transformedEvents);
       } catch (err) {
