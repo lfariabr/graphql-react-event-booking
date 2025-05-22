@@ -5,7 +5,9 @@ export const transformEvent = (event: any) => {
   return {
     ...eventObj,
     _id: eventObj._id.toString(),
-    creator: eventObj.creator,
+    // The creator field is an ObjectId reference, not a User object
+    // We need to just pass the ID and let the GraphQL resolver handle the rest
+    creator: eventObj.creator ? eventObj.creator.toString() : null,
     ...(eventObj.date && { date: dateToString(eventObj.date) }),
     createdAt: eventObj.createdAt ? dateToString(eventObj.createdAt) : new Date().toISOString(),
     updatedAt: eventObj.updatedAt ? dateToString(eventObj.updatedAt) : new Date().toISOString()
@@ -29,6 +31,8 @@ export const transformUser = (user: any) => {
   return {
     ...userObj,
     _id: userObj._id?.toString(),
-    password: null // Always mask password
+    password: null, // Always mask password
+    email: userObj.email || "",
+    name: userObj.name || ""
   };
 };

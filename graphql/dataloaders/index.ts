@@ -12,8 +12,8 @@ export function createLoaders() {
             const eventMap = events.reduce((map, event) => {
                 map[event._id.toString()] = transformEvent(event);
                 return map;
-            }, {} as Record<string, Event>);
-            return eventIds.map((eventId) => eventMap[eventId]);
+            }, {} as Record<string, any>);
+            return eventIds.map((eventId) => eventMap[eventId] || null);
         } catch (error) {
             console.error("Error loading events:", error);
             throw error;
@@ -23,12 +23,14 @@ export function createLoaders() {
     // User loader
     const userLoader = new DataLoader(async (userIds: readonly string[]) => {
         try {
+            console.log('User IDs requested:', userIds);
             const users = await User.find({ _id: { $in: userIds } });
+            console.log('Users found:', users.map(u => ({ id: u._id.toString(), email: u.email })));
             const userMap = users.reduce((map, user) => {
                 map[user._id.toString()] = transformUser(user);
                 return map;
-            }, {} as Record<string, User>);
-            return userIds.map((userId) => userMap[userId]);
+            }, {} as Record<string, any>);
+            return userIds.map((userId) => userMap[userId] || null);
         } catch (error) {
             console.error("Error loading users:", error);
             throw error;
@@ -42,32 +44,28 @@ export function createLoaders() {
             const bookingMap = bookings.reduce((map, booking) => {
                 map[booking._id.toString()] = transformBooking(booking);
                 return map;
-            }, {} as Record<string, Booking>);
-            return bookingIds.map((bookingId) => bookingMap[bookingId]);
+            }, {} as Record<string, any>);
+            return bookingIds.map((bookingId) => bookingMap[bookingId] || null);
         } catch (error) {
             console.error("Error loading bookings:", error);
             throw error;
         }
     });
 
-    // Bookings by event loader
     const bookingsByEventLoader = new DataLoader(async (eventIds: readonly string[]) => {
         try {
-          const bookings = await Booking.find({ event: { $in: eventIds } });
-          
-          // Group bookings by event ID
-          const bookingsByEvent = eventIds.map(eventId => 
-            bookings
-              .filter(booking => booking.event.toString() === eventId.toString())
-              .map(transformBooking)
-          );
-          
-          return bookingsByEvent;
+            const bookings = await Booking.find({ event: { $in: eventIds } });
+            
+            return eventIds.map(eventId => {
+                return bookings
+                    .filter((booking: any) => booking.event?.toString() === eventId.toString())
+                    .map(transformBooking);
+            });
         } catch (error) {
-          console.error('Error loading bookings by event:', error);
-          throw error;
+            console.error("Error loading bookings by event:", error);
+            throw error;
         }
-      });
+    });
 
     return {
         eventLoader,

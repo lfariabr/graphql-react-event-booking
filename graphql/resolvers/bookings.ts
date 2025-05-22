@@ -4,8 +4,8 @@ import User from '../../models/User';
 import { transformBooking, transformEvent } from './transformers';
 
 export const bookingResolvers = {
-  bookings: async (args: any, req: any) => {
-    if (!req.isAuth) {
+  bookings: async (args: any, context: any) => {
+    if (!context.req.isAuth) {
       throw new Error("Sorry to inform you, but you are not authorized! :-(");
     }
     try {
@@ -25,8 +25,8 @@ export const bookingResolvers = {
     }
   },
 
-  bookEvent: async (args: any, req: any) => {
-    if (!req.isAuth) {
+  bookEvent: async (args: any, context: any) => {
+    if (!context.req.isAuth) {
       throw new Error("Sorry to inform you, but you are not authorized! :-(");
     }
     try {
@@ -42,7 +42,7 @@ export const bookingResolvers = {
 
       const booking = new Booking({
         event: event._id,
-        user: req.userId
+        user: context.req.userId
       });
 
       const result = await booking.save();
@@ -61,8 +61,8 @@ export const bookingResolvers = {
     }
   },
 
-  cancelBooking: async (args: any, req: any) => {
-    if (!req.isAuth) {
+  cancelBooking: async (args: any, context: any) => {
+    if (!context.req.isAuth) {
       throw new Error("Sorry to inform you, but you are not authorized! :-(");
     }
     try {
