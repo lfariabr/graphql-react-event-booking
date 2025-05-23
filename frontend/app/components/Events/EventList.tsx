@@ -21,7 +21,6 @@ interface Event {
   };
   createdAt: string;
   updatedAt: string;
-  status?: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
 }
 
 export default function EventList() {
@@ -81,12 +80,7 @@ export default function EventList() {
 
         const transformedEvents = responseData.data.events.map((event: any) => ({
           ...event,
-          status: 'upcoming', 
         }));
-        console.log('Response status:', response.status);
-        console.log('Response data:', responseData);
-        console.log('Events data:', responseData.data?.events);
-
         setEvents(transformedEvents);
       } catch (err) {
         console.error('Error fetching events:', err);
@@ -110,7 +104,7 @@ export default function EventList() {
       activeTab === 'all' || 
       (activeTab === 'myEvents' 
         ? event.creator._id === userId 
-        : event.status === activeTab);
+        : true);
     
     const matchesSearch = 
       event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -246,18 +240,6 @@ export default function EventList() {
             className="max-w-md"
           />
         </div>
-        <Tabs 
-          value={activeTab} 
-          onValueChange={setActiveTab}
-          className="w-full sm:w-auto"
-        >
-          <TabsList className="grid grid-cols-3 sm:grid-cols-4 gap-1">
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-            <TabsTrigger value="ongoing">Ongoing</TabsTrigger>
-            <TabsTrigger value="completed">Completed</TabsTrigger>
-          </TabsList>
-        </Tabs>
       </div>
 
       {filteredEvents.length === 0 ? (
@@ -277,7 +259,6 @@ export default function EventList() {
               title={event.title}
               description={event.description}
               date={new Date(event.date)}
-              status={event.status || 'upcoming'}
               isCreator={event.creator._id === userId}
               price={event.price}
               creatorEmail={event.creator.email}

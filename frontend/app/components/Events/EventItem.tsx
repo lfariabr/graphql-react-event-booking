@@ -13,7 +13,6 @@ interface EventItemProps {
   title: string;
   description: string;
   date: Date;
-  status: EventStatus;
   isCreator?: boolean; 
   price?: number; 
   creatorEmail?: string; 
@@ -27,7 +26,6 @@ export default function EventItem({
   title,
   description,
   date,
-  status,
   isCreator = false, 
   price = 0, 
   creatorEmail = '',
@@ -36,10 +34,6 @@ export default function EventItem({
   isBooking = false
 }: EventItemProps) {
   const statusVariant = {
-    upcoming: 'bg-blue-100 text-blue-800 hover:bg-blue-100',
-    ongoing: 'bg-green-100 text-green-800 hover:bg-green-100',
-    completed: 'bg-gray-100 text-gray-800 hover:bg-gray-100',
-    cancelled: 'bg-red-100 text-red-800 hover:bg-red-100',
     myEvents: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100',
   };
 
@@ -99,15 +93,16 @@ export default function EventItem({
               <span className="text-xs text-emerald-600 font-medium">You created this event</span>
             )}
           </div>
-          <Badge className={statusVariant[status]}>{status}</Badge>
         </div>
-        <CardDescription className="line-clamp-2">{description}</CardDescription>
       </CardHeader>
       
       <CardContent className="space-y-3 pb-4">
         <div className="flex items-center text-sm text-muted-foreground">
           <Calendar className="mr-2 h-4 w-4" />
           <span>{format(date, 'PPP')}</span>
+        </div>
+        <div className="flex items-center text-sm font-medium">
+          <span>Price: ${price.toFixed(2)}</span>
         </div>
       </CardContent>
       

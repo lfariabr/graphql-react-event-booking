@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { Button } from "@/app/components/ui/button";
 import { Plus } from 'lucide-react';
 import BookingList from '@/app/components/Bookings/BookingList';
+import BookingChart from '@/app/components/Bookings/BookingChart';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/app/components/ui/tabs";
 
 export default function BookingsView() {
     const { isAuthenticated } = useAuth();
@@ -29,7 +31,18 @@ export default function BookingsView() {
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow">
-                <BookingList />
+                <Tabs defaultValue="list" className="w-full">
+                    <TabsList>
+                        <TabsTrigger value="list">List</TabsTrigger>
+                        <TabsTrigger value="chart">Chart</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="list">
+                        <BookingList />
+                    </TabsContent>
+                    <TabsContent value="chart">
+                        <BookingChart />
+                    </TabsContent>
+                </Tabs>
             </div>
         </div>
     );

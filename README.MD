@@ -1,86 +1,109 @@
-# Build a complete app with GraphQL, Node.js, MongoDB and React
+# BooqMe
 
-## Progress
-- [x] What is GraphQL?
-- [x] API Design and project setup
-- [x] Schemas and Resolvers
-- [x] Types and Data
-- [x] Mongo DB
-- [x] Adding relations
-- [x] Dynamic relations
-- [x] Adding Booking
-- [x] Refactoring our code
-- [x] Authentication + Postman
-- [x] React app
-- [x] Navbar
-- [x] Hitting the API
-- [x] Using the Token
-- [x] Add modal for event creation
-- [x] Add event creation frontend + backend
-- [x] Add event features
-- [x] add bookings
-- [x] cancel bookings
-- [ ] adding dataloader
-...
+BooqMe is a modern event booking platform built with GraphQL, Node.js, MongoDB, and React. The application allows users to create events, book tickets, and manage their bookings through an intuitive interface.
 
-##### 1. What is GraphQL?
-https://www.youtube.com/watch?v=7giZGFDGnkc&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=2
+## 🚀 Features
 
-##### 2. API Design and project setup:
-https://www.youtube.com/watch?v=yvEEeKMuxn0&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=3
+- **User Authentication** - Secure login and registration system
+- **Event Creation** - Create and publish events with details
+- **Event Discovery** - Browse and search for events
+- **Booking Management** - Book events and manage bookings
+- **Multi-booking System** - Book multiple events simultaneously
+- **Real-time Feedback** - Instant visual feedback on booking status
 
-##### 3. Schemas and Resolvers:
-https://www.youtube.com/watch?v=LXTyzk2uud0&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=3
+## 💻 Tech Stack
 
-##### 4. Types & Data
-https://www.youtube.com/watch?v=6YlXANbXt0g&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=4
+### Backend
+- **Node.js** - JavaScript runtime
+- **Express** - Web framework
+- **GraphQL** - API query language
+- **MongoDB** - NoSQL database
+- **Mongoose** - MongoDB object modeling
+- **DataLoader** - Batching and caching for GraphQL
 
-##### 5. Mongo DB
-https://www.youtube.com/watch?v=sOUNgOx0GcU&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=5 (22m59s)
+### Frontend
+- **Next.js** - React framework
+- **TypeScript** - Typed JavaScript
+- **React** - UI library
+- **localStorage** - Client-side state management
 
-##### 6. Adding relations
-https://www.youtube.com/watch?v=MRrcUQhZwBc&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=6 (14m47s)
+## 🛠️ Installation
 
-##### 7. Dynamic relations
-https://www.youtube.com/watch?v=bgq7FRSPDpI&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=7
+### Prerequisites
+- Node.js
+- MongoDB Atlas account (or local MongoDB)
+- npm or yarn
 
-##### 8. Adding Booking
-https://www.youtube.com/watch?v=WcyYYD5xkuQ&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=8
+### Setup
 
-##### 9. Refactoring our code
-https://www.youtube.com/watch?v=6y44oPKfqXU&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=9
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/booqme.git
+cd booqme
+```
 
-##### 10. Authentication
-https://www.youtube.com/watch?v=uk9YHJsOjVo&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=10
+2. Install backend dependencies
+```bash
+npm install
+```
 
-##### 11. React app
-https://www.youtube.com/watch?v=JmFSGqbmzT4&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=11
-npx create-next-app@latest frontend --typescript
+3. Install frontend dependencies
+```bash
+cd frontend
+npm install
+```
+
+4. Create a `.env` file in the root directory with the following variables:
+```
+MONGO_DB_USERNAME=your_mongodb_username
+MONGO_DB_PASSWORD=your_mongodb_password
+MONGO_DB=your_mongodb_cluster_name
+JWT_SECRET=your_jwt_secret
+```
+
+## 🚀 Running the Application
+
+### Backend
+```bash
+# From the root directory
 npm run dev
+```
+The backend server will run on http://localhost:8000
 
-##### 12. Navbar
-https://www.youtube.com/watch?v=0gCGzQvoB9o&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=12
+### Frontend
+```bash
+# From the frontend directory
+npm run dev
+```
+The frontend application will run on http://localhost:3000
 
-##### 13. Hitting the API
-https://www.youtube.com/watch?v=VdwH3RDRXNM&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=13
+## 📱 Application Architecture
 
-##### 14. Using the Token
-https://www.youtube.com/watch?v=wMg_b1zZcag&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=14
+### Backend Architecture
+- Express server with GraphQL API endpoint
+- Authentication middleware for protected routes
+- MongoDB models for Users, Events, and Bookings
+- GraphQL schema and resolvers for data operations
+- DataLoader for efficient data fetching
 
-##### 15. Add modal for event creation
-https://www.youtube.com/watch?v=2rXtTi0Pn9E&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=15
+### Frontend Architecture
+- Next.js pages for routing
+- React components for UI
+- Cross-page state management with localStorage
+- Multi-booking system that stores booking data locally
 
-##### 16. Add event creation frontend + backend
-https://www.youtube.com/watch?v=2rXtTi0Pn9E&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=16
+## 💾 Data Management
 
-##### 17. Add event features
-https://www.youtube.com/watch?v=VyICeJW9vDI&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=17
+The application implements a multi-booking system that stores an array of bookings in localStorage under the key 'userBookings' while maintaining backward compatibility with the single 'latestBooking' implementation. This approach allows:
 
-##### 18. Add bookings
-https://www.youtube.com/watch?v=VyICeJW9vDI&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=18
+- Booking multiple events rather than restricting to a single booking
+- Instant visual feedback on booking status
+- Cross-page state persistence
 
-##### 19. Cancel bookings
-https://www.youtube.com/watch?v=VyICeJW9vDI&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=19
+## 🤝 Contributing
 
-##### 20. Adding dataloader
-https://www.youtube.com/watch?v=GWugdZES05U&list=PL55RiY5tL51rG1x02Yyj93iypUuHYXcB_&index=20
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
